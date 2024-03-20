@@ -85,3 +85,10 @@ class P10(Player):
     @staticmethod
     def make_turn(turn_history, your_number):
         return random.choice([2, 3, 4])
+    
+class P11(Player):
+    name = "Random(1, 2, 3)"
+
+    @staticmethod
+    def make_turn(turn_history, your_number):
+        return random.choice([1, 2, 3])

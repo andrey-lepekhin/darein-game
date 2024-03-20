@@ -106,6 +106,7 @@ class DarwinGame:
 
     def run_tournament(self) -> dict[type[Player], int]:
         print(colored_player_names(self.player_classes))
+        print(colored_single_round_results({player_class: self.initial_player_copies for player_class in self.player_classes}))
 
         player_stats_bar = tqdm(range(1), desc="Top players", bar_format="{desc}", position=0)
         pbar = tqdm(range(self.rounds), desc="Playing rounds", position=1)

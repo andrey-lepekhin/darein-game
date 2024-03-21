@@ -1,7 +1,10 @@
 import time
 from dataclasses import dataclass, field
+import logging
 
 from darwin_game.models.player import Action, Player, PlayerNumber, TurnResult
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(slots=True)
@@ -41,13 +44,14 @@ class Game:
             if not 0 <= turn_action <= 5:
                 raise ValueError(f"{player} returned a non-Action object: {turn_action}")
             return turn_action
-        except Exception:
-            # print(f"{player} failed with error: {e}. Counting that as a 0 action.")
+        except Exception as e:
+            logger.debug(f"{player} failed with error: {e}. Counting that as a 0 action.")
             return 0
 
     def _play_turn(self) -> None:
         player1_action = self._make_safe_play_turn(self.player1)
         player2_action = self._make_safe_play_turn(self.player2)
+        # logger.debug(f"{self.player1.name}: {player1_action}, {self.player2.name}: {player2_action}")
 
         results = self._get_turn_result(player1_action, player2_action)
 
@@ -63,7 +67,12 @@ class Game:
             player2_score += turn.results[PlayerNumber.PLAYER2]
         return {self.player1: player1_score, self.player2: player2_score}
 
+    def _reset_game(self) -> None:
+        self.turn_history = []
+        self.turn_number = 0
+
     def play_game(self) -> dict[Player, int]:
+        self._reset_game()
         while self.turn_number < self.max_turns:
             self._play_turn()
         return self._get_results()

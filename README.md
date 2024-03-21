@@ -28,6 +28,7 @@ The Darwin Game encourages players to evolve their strategies over time, balanci
 ## Player implementation
 - Implement your player as a child of the [Player abstract class](./darwin_game/models/player.py).
 - Place your player class into the `/darwin_game/players` (sub)folder.
+- Your code should not take more than 0.0003 seconds to run, otherwise your turn will be counted as 0
 
 ## Running the tournament
 You will need Python 3.12 to run the tournament.

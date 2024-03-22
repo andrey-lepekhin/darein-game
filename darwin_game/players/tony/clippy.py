@@ -6,97 +6,83 @@ from darwin_game.models.player import Action, Player, PlayerNumber, TurnResult  
 
 class Clippy(Player):  # line:7
     name = "Clippy"  # line:8
+    state = None  # line:9
 
     def make_turn(
-        O0OOO0OOOOO00OOO0,
-        O00O0OOO000O00000: list[TurnResult],
-        OOOO00OO000OO0OOO: PlayerNumber,
-    ) -> Action:  # line:12
-        OOO0000OO000O00O0 = [
-            O00OO0O0000000000.actions[OOOO00OO000OO0OOO]
-            for O00OO0O0000000000 in O00O0OOO000O00000
-        ]  # line:14
-        OO0O00O0O000O0OOO = [
-            O0OOOOOO000OOOOOO.actions[1 - OOOO00OO000OO0OOO]
-            for O0OOOOOO000OOOOOO in O00O0OOO000O00000
+        O00OO0OO0OOO00OO0,
+        O0OO0O0O0O000O000: list[TurnResult],
+        O0O0OOOO0000OO000: PlayerNumber,
+    ) -> Action:  # line:13
+        O000000000OOO0OOO = [
+            O0000OOOO0OOO00O0.actions[O0O0OOOO0000OO000]
+            for O0000OOOO0OOO00O0 in O0OO0O0O0O000O000
         ]  # line:15
-        OOOOOO00O00OO0OO0 = len(O00O0OOO000O00000)  # line:17
-        if OOOOOO00O00OO0OO0 < 3:  # line:19
-            return random.choice([2, 3])  # line:20
-        O00OO0OOOOO00O000 = all(
-            [
-                OOOOOO0000O0O0OOO in [2, 3]
-                for OOOOOO0000O0O0OOO in OO0O00O0O000O0OOO[-3:]
-            ]
-        )  # line:22
-        if OOOOOO00O00OO0OO0 < 7 and O00OO0OOOOO00O000:  # line:25
-            if OOO0000OO000O00O0[-1] == 3 and OO0O00O0O000O0OOO[-1] == 2:  # line:26
-                return 2  # line:27
-            elif OOO0000OO000O00O0[-1] == 2 and OO0O00O0O000O0OOO[-1] == 3:  # line:29
-                return 3  # line:30
-            else:  # line:32
-                return random.choice([2, 3])  # line:33
-        if O00OO0OOOOO00O000:  # line:36
-            if OOOOOO00O00OO0OO0 == 7:  # line:37
-                if (
-                    OOO0000OO000O00O0[-1] == OO0O00O0O000O0OOO[-2]
-                    and OOO0000OO000O00O0[-2] == OO0O00O0O000O0OOO[-3]
-                ):  # line:41
-                    return OOO0000OO000O00O0[-1]  # line:42
-            if OOOOOO00O00OO0OO0 == 8:  # line:44
-                if (
-                    OOO0000OO000O00O0[-1] == OOO0000OO000O00O0[-2]
-                    and OO0O00O0O000O0OOO[-1] == OO0O00O0O000O0OOO[-2]
-                    and OOO0000OO000O00O0[-2] == OO0O00O0O000O0OOO[-3]
-                ):  # line:49
-                    return OO0O00O0O000O0OOO[-1]  # line:50
-            O0O000OOOOO0O0000 = (
-                OO0O00O0O000O0OOO[-1] == OO0O00O0O000O0OOO[-2]
-                and OO0O00O0O000O0OOO[-2] != OO0O00O0O000O0OOO[-3]
-            )  # line:55
-            OO0OOOOOO0O0O0O0O = (
-                OO0O00O0O000O0OOO[-1] != OO0O00O0O000O0OOO[-2]
-                and OO0O00O0O000O0OOO[-2] == OO0O00O0O000O0OOO[-3]
-            )  # line:59
-            if O0O000OOOOO0O0000:  # line:61
-                return OO0O00O0O000O0OOO[-1]  # line:62
-            if OO0OOOOOO0O0O0O0O:  # line:64
-                return OOO0000OO000O00O0[-1]  # line:65
-        if OOO0000OO000O00O0[-6:-1] == OO0O00O0O000O0OOO[-5:]:  # line:67
-            if OOO0000OO000O00O0[-1] == 3:  # line:68
-                return 5  # line:69
-            if OOO0000OO000O00O0[-1] == 5:  # line:70
-                return 1  # line:71
-            if OOO0000OO000O00O0[-1] == 1:  # line:72
-                return 0  # line:73
-            if OOO0000OO000O00O0[-1] == 0:  # line:74
-                return 5  # line:75
+        OOO0O0OO000OOO0OO = [
+            O0O0OO00OOOOOOOOO.actions[1 - O0O0OOOO0000OO000]
+            for O0O0OO00OOOOOOOOO in O0OO0O0O0O000O000
+        ]  # line:16
+        OOO0OOO00O0000O00 = len(O0OO0O0O0O000O000) + 1  # line:18
         if all(
-            [O00000000O0O000OO == 2 for O00000000O0O000OO in OO0O00O0O000O0OOO[-5:]]
-        ):  # line:77
-            return 3  # line:78
-        O0OO00OOOO0O0O0OO = Counter(OO0O00O0O000O0OOO)  # line:80
-        O000OOOOOOOOOO0O0 = len(OO0O00O0O000O0OOO)  # line:81
-        O0OO0OOOOOO0000O0 = {
-            OO0O00O0O000OOOOO: O0OO00OOOO0O0O0OO.get(OO0O00O0O000OOOOO, 0)
-            for OO0O00O0O000OOOOO in range(6)
-        }  # line:83
-        OO00OOO0O0O0O0OOO = {
-            OOO00O0O0O0OO0OO0: OOO0O000O00OOO0OO / O000OOOOOOOOOO0O0
-            for OOO00O0O0O0OO0OO0, OOO0O000O00OOO0OO in O0OO0OOOOOO0000O0.items()
-        }  # line:85
-        O00OO00O00O0O00OO, OO0OOOO0O00O00O0O = O0OO00OOOO0O0O0OO.most_common(1)[
+            [O00OOO0O00OOO0OO0 in [2, 3] for O00OOO0O00OOO0OO0 in OOO0O0OO000OOO0OO]
+        ):  # line:20
+            if OOO0OOO00O0000O00 < 4:  # line:21
+                O00OO0OO0OOO00OO0.state = "sub4"  # line:22
+                return random.choice([2, 3])  # line:23
+            if OOO0OOO00O0000O00 == 4:  # line:25
+                O00OO0OO0OOO00OO0.state = "4"  # line:26
+                if hash(str(O000000000OOO0OOO)) > hash(
+                    str(OOO0O0OO000OOO0OO)
+                ):  # line:27
+                    return 3  # line:28
+                else:  # line:29
+                    return 2  # line:30
+            if (OOO0OOO00O0000O00 > 4) and all(
+                [
+                    sum(OO00O0O0OO00000O0.actions) == 5
+                    for OO00O0O0OO00000O0 in O0OO0O0O0O000O000[3:]
+                ]
+            ):  # line:33
+                O00OO0OO0OOO00OO0.state = "post4"  # line:34
+                if hash("clippy" + str(OOO0OOO00O0000O00)) % 2 == 0:  # line:35
+                    return O000000000OOO0OOO[-1]  # line:36
+                else:  # line:37
+                    return OOO0O0OO000OOO0OO[-1]  # line:38
+        if O000000000OOO0OOO[:-1] == OOO0O0OO000OOO0OO[1:]:  # line:40
+            O00OO0OO0OOO00OO0.state = "mirror"  # line:41
+            if O000000000OOO0OOO[-1] == 3:  # line:42
+                return 5  # line:43
+            if O000000000OOO0OOO[-1] == 5:  # line:44
+                return 1  # line:45
+            if O000000000OOO0OOO[-1] == 1:  # line:46
+                return 0  # line:47
+            if O000000000OOO0OOO[-1] == 0:  # line:48
+                return 5  # line:49
+        OOO00O00OO0OOOO0O = Counter(OOO0O0OO000OOO0OO[-10:])  # line:51
+        OO00O00O0O000O0OO = 10  # line:52
+        O0OO0OO0OOOOOO0OO = {
+            OO0OOOO0OO000OO00: OOO00O00OO0OOOO0O.get(OO0OOOO0OO000OO00, 0)
+            for OO0OOOO0OO000OO00 in range(6)
+        }  # line:54
+        O0O00OOOO00OOO000 = {
+            OO00O00O0O0O0O0O0: OOO00OO000OOO0OO0 / OO00O00O0O000O0OO
+            for OO00O00O0O0O0O0O0, OOO00OO000OOO0OO0 in O0OO0OO0OOOOOO0OO.items()
+        }  # line:56
+        O0OOO00OOOOOO00O0, O0OO0OO00000O0O0O = OOO00O00OO0OOOO0O.most_common(1)[
             0
-        ]  # line:88
-        OO0O00OO0O0OOO00O = OO0OOOO0O00O00O0O / O000OOOOOOOOOO0O0  # line:89
-        OOO000OOOOO0OO00O = sum(
-            OO00OOO0O0O0O0OOO[OO0OO0OOO000000OO] for OO0OO0OOO000000OO in range(3)
-        )  # line:92
-        if OO0O00OO0O0OOO00O > 0.5 and O00OO00O00O0O00OO < 3:  # line:94
-            return 5 - int(O00OO00O00O0O00OO)  # line:95
-        if OOO000OOOOO0OO00O > 0.5:  # line:97
-            return 3  # line:98
-        if np.random.random() > 0.66:  # line:100
-            return 2  # line:101
-        else:  # line:102
-            return 3  # line:103
+        ]  # line:59
+        OO0OO00O0O0O00000 = O0OO0OO00000O0O0O / OO00O00O0O000O0OO  # line:60
+        if OO0OO00O0O0O00000 > 0.5 and O0OOO00OOOOOO00O0 < 3:  # line:62
+            O00OO0OO0OOO00OO0.state = "bully"  # line:63
+            return 5 - int(O0OOO00OOOOOO00O0)  # line:64
+        O000O0OO0O0O00OOO = sum(
+            [
+                O00OOOOOO0OOO0000
+                for OOOO0O00OOOOOOO0O, O00OOOOOO0OOO0000 in O0O00OOOO00OOO000.items()
+                if OOOO0O00OOOOOOO0O < 3
+            ]
+        )  # line:66
+        O00OO0OO0OOO00OO0.state = "halve_sub3"  # line:67
+        if np.random.random() < (O000O0OO0O0O00OOO * 0.5):  # line:68
+            return 2  # line:69
+        else:  # line:70
+            return 3  # line:71

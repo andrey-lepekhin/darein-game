@@ -12,7 +12,7 @@ class Game:
     player1: Player
     player2: Player
     max_turns: int
-    per_turn_results: bool = False
+    debug_per_turn_results: bool = False
 
     turn_history: list[TurnResult] = field(default_factory=list[TurnResult], init=False)
     turn_number: int = field(default=0, init=False)
@@ -53,7 +53,7 @@ class Game:
     def _play_turn(self) -> None:
         player1_action = self._make_safe_play_turn(self.player1)
         player2_action = self._make_safe_play_turn(self.player2)
-        if self.per_turn_results:
+        if self.debug_per_turn_results:
             logger.debug(
                 f"{self.turn_number}: {self.player1.name}: {player1_action}, {self.player2.name}: {player2_action}"
             )

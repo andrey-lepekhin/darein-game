@@ -39,7 +39,7 @@ player1 = DebuggedPlayer()
 player2 = Opponent()
 game_results = []
 
-game_with_opponent = Game(player1=player1, player2=player2, max_turns=100, per_turn_results=True)
+game_with_opponent = Game(player1=player1, player2=player2, max_turns=100, debug_per_turn_results=True)
 for _ in trange(ROUNDS_WITH_OPPONENT):
     game_with_opponent.play_game()
     game_results.append(game_with_opponent.play_game())

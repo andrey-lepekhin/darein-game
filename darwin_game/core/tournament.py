@@ -32,6 +32,8 @@ class DarwinGame:
     initial_player_copies: int = 100  # Number of copies of each player to start with; should be even > 1
     game_turns: int = 100  # Number of turns per game
     matchup_type: MatchupType = MatchupType.RANDOM_PAIRING
+
+
     lowest_pool_percent_for_player: float | None = (
         0.01  # Players taking up less than this percentage of the pool are taken out
     )
@@ -69,6 +71,8 @@ class DarwinGame:
         logger.debug([f"{player.name}: {result}" for player, result in game_result.items()])
         for player, points in game_result.items():
             results[player.__class__] += points
+
+        matchup_key = frozenset([player1.__class__, player2.__class__])
 
     def play_round(self) -> dict[type[Player], int]:
         results = {player_class: 0 for player_class in self.player_classes}

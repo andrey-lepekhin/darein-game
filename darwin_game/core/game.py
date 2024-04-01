@@ -1,4 +1,4 @@
-import time
+from time import perf_counter
 from dataclasses import dataclass, field
 import logging
 
@@ -12,6 +12,8 @@ class Game:
     player1: Player
     player2: Player
     max_turns: int
+    players_debug: bool = False
+
     turn_history: list[TurnResult] = field(default_factory=list[TurnResult], init=False)
     turn_number: int = field(default=0, init=False)
 
@@ -33,11 +35,11 @@ class Game:
     def _make_safe_play_turn(self, player: Player, timeout_seconds: float = 0.0003) -> Action:
         player_number = PlayerNumber.PLAYER1 if self.player1 == player else PlayerNumber.PLAYER2
 
-        start_time = time.time()
+        start_time = perf_counter()
         try:
             turn_action = player.make_turn(self.turn_history, player_number)
 
-            elapsed_time = time.time() - start_time
+            elapsed_time = perf_counter() - start_time
             if elapsed_time > timeout_seconds:
                 raise TimeoutError(f"{player} took more than {timeout_seconds} seconds to make a turn.")
 
@@ -51,7 +53,10 @@ class Game:
     def _play_turn(self) -> None:
         player1_action = self._make_safe_play_turn(self.player1)
         player2_action = self._make_safe_play_turn(self.player2)
-        # logger.debug(f"{self.player1.name}: {player1_action}, {self.player2.name}: {player2_action}")
+        if self.players_debug:
+            logger.debug(
+                f"{self.turn_number}: {self.player1.name}: {player1_action}, {self.player2.name}: {player2_action}"
+            )
 
         results = self._get_turn_result(player1_action, player2_action)
 

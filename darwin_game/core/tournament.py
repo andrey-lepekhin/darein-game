@@ -1,5 +1,7 @@
 import random
 from dataclasses import dataclass
+import logging
+from enum import StrEnum
 
 from tabulate import tabulate  # type: ignore
 from tqdm.auto import tqdm
@@ -13,6 +15,14 @@ from darwin_game.core.graph_utils import (
 from darwin_game.models.player import Player
 
 
+logger = logging.getLogger(__name__)
+
+
+class MatchupType(StrEnum):
+    RANDOM_PAIRING = "RandomPairing"
+    ROUND_ROBIN = "RoundRobin"
+
+
 @dataclass
 class DarwinGame:
     """A class to run a Darwin Game tournament between a list of Player classes."""
@@ -21,6 +31,7 @@ class DarwinGame:
     rounds: int = 100  # Number of rounds to play in the tournament
     initial_player_copies: int = 100  # Number of copies of each player to start with; should be even > 1
     game_turns: int = 100  # Number of turns per game
+    matchup_type: MatchupType = MatchupType.RANDOM_PAIRING
     lowest_pool_percent_for_player: float | None = (
         0.01  # Players taking up less than this percentage of the pool are taken out
     )
@@ -50,17 +61,28 @@ class DarwinGame:
 
         return pool
 
+    def _play_single_game_and_update_results(
+        self, player1: Player, player2: Player, results: dict[type[Player], int]
+    ) -> None:
+        game = Game(player1, player2, max_turns=self.game_turns)
+        game_result = game.play_game()
+        logger.debug([f"{player.name}: {result}" for player, result in game_result.items()])
+        for player, points in game_result.items():
+            results[player.__class__] += points
+
     def play_round(self) -> dict[type[Player], int]:
-        # Randomly pair players and play games
-        random.shuffle(self.pool)
         results = {player_class: 0 for player_class in self.player_classes}
-        for i in range(0, len(self.pool), 2):
-            player1 = self.pool[i]
-            player2 = self.pool[i + 1]
-            game = Game(player1, player2, max_turns=self.game_turns)
-            game_result = game.play_game()
-            for player, points in game_result.items():
-                results[player.__class__] += points
+
+        if self.matchup_type == MatchupType.RANDOM_PAIRING:
+            random.shuffle(self.pool)
+            for i in range(0, len(self.pool), 2):
+                self._play_single_game_and_update_results(self.pool[i], self.pool[i + 1], results)
+
+        elif self.matchup_type == MatchupType.ROUND_ROBIN:
+            for i, player1 in enumerate(self.pool[:-1]):  # No need to include the last player in the outer loop
+                for player2 in self.pool[i + 1 :]:
+                    self._play_single_game_and_update_results(player1, player2, results)
+
         return results
 
     def adjust_population(self, round_results: dict[type[Player], int]) -> None:

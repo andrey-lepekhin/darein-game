@@ -9,80 +9,106 @@ class Clippy(Player):  # line:7
     state = None  # line:9
 
     def make_turn(
-        O00OO0OO0OOO00OO0,
-        O0OO0O0O0O000O000: list[TurnResult],
-        O0O0OOOO0000OO000: PlayerNumber,
+        O0OOOO0OO0O0O0O0O,
+        O0OOOOO0O000OOO0O: list[TurnResult],
+        O0OO00000O00O00O0: PlayerNumber,
     ) -> Action:  # line:13
-        O000000000OOO0OOO = [
-            O0000OOOO0OOO00O0.actions[O0O0OOOO0000OO000]
-            for O0000OOOO0OOO00O0 in O0OO0O0O0O000O000
+        O00O000O0O00O00O0 = [
+            O0O00O00O000000OO.actions[O0OO00000O00O00O0]
+            for O0O00O00O000000OO in O0OOOOO0O000OOO0O
         ]  # line:15
-        OOO0O0OO000OOO0OO = [
-            O0O0OO00OOOOOOOOO.actions[1 - O0O0OOOO0000OO000]
-            for O0O0OO00OOOOOOOOO in O0OO0O0O0O000O000
+        OOOOOO00OOOOO00O0 = [
+            O000OOOOOO0O0O0OO.actions[1 - O0OO00000O00O00O0]
+            for O000OOOOOO0O0O0OO in O0OOOOO0O000OOO0O
         ]  # line:16
-        OOO0OOO00O0000O00 = len(O0OO0O0O0O000O000) + 1  # line:18
+        O0O00000O000O00O0 = len(O0OOOOO0O000OOO0O)  # line:18
         if all(
-            [O00OOO0O00OOO0OO0 in [2, 3] for O00OOO0O00OOO0OO0 in OOO0O0OO000OOO0OO]
+            [OOO0OOOOOO0000O00 in [0, 2, 3] for OOO0OOOOOO0000O00 in OOOOOO00OOOOO00O0]
         ):  # line:20
-            if OOO0OOO00O0000O00 < 4:  # line:21
-                O00OO0OO0OOO00OO0.state = "sub4"  # line:22
+            if O0O00000O000O00O0 < 8:  # line:21
+                O0OOOO0OO0O0O0O0O.state = "sub8"  # line:22
                 return random.choice([2, 3])  # line:23
-            if OOO0OOO00O0000O00 == 4:  # line:25
-                O00OO0OO0OOO00OO0.state = "4"  # line:26
-                if hash(str(O000000000OOO0OOO)) > hash(
-                    str(OOO0O0OO000OOO0OO)
+            if O0O00000O000O00O0 == 8:  # line:25
+                O0OOOO0OO0O0O0O0O.state = "8"  # line:26
+                if hash(str(O00O000O0O00O00O0)) > hash(
+                    str(OOOOOO00OOOOO00O0)
                 ):  # line:27
                     return 3  # line:28
                 else:  # line:29
                     return 2  # line:30
-            if (OOO0OOO00O0000O00 > 4) and all(
-                [
-                    sum(OO00O0O0OO00000O0.actions) == 5
-                    for OO00O0O0OO00000O0 in O0OO0O0O0O000O000[3:]
-                ]
-            ):  # line:33
-                O00OO0OO0OOO00OO0.state = "post4"  # line:34
-                if hash("clippy" + str(OOO0OOO00O0000O00)) % 2 == 0:  # line:35
-                    return O000000000OOO0OOO[-1]  # line:36
-                else:  # line:37
-                    return OOO0O0OO000OOO0OO[-1]  # line:38
-        if O000000000OOO0OOO[:-1] == OOO0O0OO000OOO0OO[1:]:  # line:40
-            O00OO0OO0OOO00OO0.state = "mirror"  # line:41
-            if O000000000OOO0OOO[-1] == 3:  # line:42
-                return 5  # line:43
-            if O000000000OOO0OOO[-1] == 5:  # line:44
-                return 1  # line:45
-            if O000000000OOO0OOO[-1] == 1:  # line:46
-                return 0  # line:47
-            if O000000000OOO0OOO[-1] == 0:  # line:48
-                return 5  # line:49
-        OOO00O00OO0OOOO0O = Counter(OOO0O0OO000OOO0OO[-10:])  # line:51
-        OO00O00O0O000O0OO = 10  # line:52
-        O0OO0OO0OOOOOO0OO = {
-            OO0OOOO0OO000OO00: OOO00O00OO0OOOO0O.get(OO0OOOO0OO000OO00, 0)
-            for OO0OOOO0OO000OO00 in range(6)
-        }  # line:54
-        O0O00OOOO00OOO000 = {
-            OO00O00O0O0O0O0O0: OOO00OO000OOO0OO0 / OO00O00O0O000O0OO
-            for OO00O00O0O0O0O0O0, OOO00OO000OOO0OO0 in O0OO0OO0OOOOOO0OO.items()
-        }  # line:56
-        O0OOO00OOOOOO00O0, O0OO0OO00000O0O0O = OOO00O00OO0OOOO0O.most_common(1)[
+            if (
+                (O0O00000O000O00O0 > 8)
+                and all(
+                    [
+                        sum(O000O0O0000OOO0O0.actions) in [2, 3, 5]
+                        for O000O0O0000OOO0O0 in O0OOOOO0O000OOO0O[8:]
+                    ]
+                )
+                and all(
+                    [
+                        OO00O000OO00OO0OO in set(OOOOOO00OOOOO00O0)
+                        for OO00O000OO00OO0OO in [2, 3]
+                    ]
+                )
+            ):  # line:35
+                O0OOOO0OO0O0O0O0O.state = "post8"  # line:36
+                if hash("clippy" + str(O0O00000O000O00O0)) % 2 == 0:  # line:37
+                    if (O00O000O0O00O00O0[-1] == 3) or (
+                        OOOOOO00OOOOO00O0[-1] == 2
+                    ):  # line:38
+                        return 3  # line:39
+                    else:  # line:40
+                        return 2  # line:41
+                else:  # line:42
+                    if (O00O000O0O00O00O0[-1] == 2) or (
+                        OOOOOO00OOOOO00O0[-1] == 3
+                    ):  # line:43
+                        return 3  # line:44
+                    else:  # line:45
+                        return 2  # line:46
+        O0OOOO0OO0O0O0O0O.state = "something_else"  # line:47
+        if O00O000O0O00O00O0[:-1] == OOOOOO00OOOOO00O0[1:]:  # line:49
+            O0OOOO0OO0O0O0O0O.state = "always_mirror"  # line:50
+            if O00O000O0O00O00O0[-1] == 3:  # line:51
+                return 5  # line:52
+            if O00O000O0O00O00O0[-1] == 5:  # line:53
+                return 1  # line:54
+            if O00O000O0O00O00O0[-1] == 1:  # line:55
+                return 0  # line:56
+            if O00O000O0O00O00O0[-1] == 0:  # line:57
+                return 5  # line:58
+        if len(set(OOOOOO00OOOOO00O0)) == 1:  # line:60
+            O0OOOO0OO0O0O0O0O.state = "always_same"  # line:61
+            if OOOOOO00OOOOO00O0[-1] < 3:  # line:62
+                return 5 - OOOOOO00OOOOO00O0[-1]  # line:63
+            else:  # line:64
+                return 3  # line:65
+        O0O000OOO00OO0O0O = Counter(OOOOOO00OOOOO00O0[-10:])  # line:67
+        OOOO0O0OOOO000OOO = 10  # line:68
+        OO0000OO0OO0000O0 = {
+            O00OO000OO0O0OO0O: O0O000OOO00OO0O0O.get(O00OO000OO0O0OO0O, 0)
+            for O00OO000OO0O0OO0O in range(6)
+        }  # line:70
+        O00000OO0000OO00O = {
+            OOO0OO00O0OO00OO0: O0000O00O0000O0O0 / OOOO0O0OOOO000OOO
+            for OOO0OO00O0OO00OO0, O0000O00O0000O0O0 in OO0000OO0OO0000O0.items()
+        }  # line:72
+        O0O0O0OO0O000O00O, O0000O0OOOOO0O0OO = O0O000OOO00OO0O0O.most_common(1)[
             0
-        ]  # line:59
-        OO0OO00O0O0O00000 = O0OO0OO00000O0O0O / OO00O00O0O000O0OO  # line:60
-        if OO0OO00O0O0O00000 > 0.5 and O0OOO00OOOOOO00O0 < 3:  # line:62
-            O00OO0OO0OOO00OO0.state = "bully"  # line:63
-            return 5 - int(O0OOO00OOOOOO00O0)  # line:64
-        O000O0OO0O0O00OOO = sum(
+        ]  # line:75
+        O0OOO0OO00OOOO0OO = O0000O0OOOOO0O0OO / OOOO0O0OOOO000OOO  # line:76
+        if O0OOO0OO00OOOO0OO > 0.5 and O0O0O0OO0O000O00O < 3:  # line:78
+            O0OOOO0OO0O0O0O0O.state = "bully"  # line:79
+            return 5 - int(O0O0O0OO0O000O00O)  # line:80
+        O000000OO0O00OOO0 = sum(
             [
-                O00OOOOOO0OOO0000
-                for OOOO0O00OOOOOOO0O, O00OOOOOO0OOO0000 in O0O00OOOO00OOO000.items()
-                if OOOO0O00OOOOOOO0O < 3
+                OOO0OOO00OO00OOO0
+                for O00O000OO0OO00OOO, OOO0OOO00OO00OOO0 in O00000OO0000OO00O.items()
+                if O00O000OO0OO00OOO < 3
             ]
-        )  # line:66
-        O00OO0OO0OOO00OO0.state = "halve_sub3"  # line:67
-        if np.random.random() < (O000O0OO0O0O00OOO * 0.5):  # line:68
-            return 2  # line:69
-        else:  # line:70
-            return 3  # line:71
+        )  # line:82
+        O0OOOO0OO0O0O0O0O.state = "halve_sub3"  # line:83
+        if np.random.random() < (O000000OO0O00OOO0 * 0.5):  # line:84
+            return 2  # line:85
+        else:  # line:86
+            return 3  # line:87

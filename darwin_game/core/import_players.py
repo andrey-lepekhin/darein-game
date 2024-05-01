@@ -5,11 +5,11 @@ import os
 from darwin_game.models.player import Player
 
 
-def find_import_player_classes(directory: str, exclude_dirs: list[str] = []) -> list[type[Player]]:
+def find_import_player_classes(directory: str, include_dirs: list[str] = []) -> list[type[Player]]:
     player_classes = []
 
     for root, dirs, files in os.walk(directory):
-        if root.split("/")[-1] in exclude_dirs:
+        if root.split("/")[-1] not in include_dirs:
             continue
         for file in files:
             if file.endswith(".py") and not file.startswith("__"):

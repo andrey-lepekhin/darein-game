@@ -7,11 +7,12 @@ logging.basicConfig(level=logging.INFO)  # set to DEBUG for more info. Will brea
 
 players_folder = "darwin_game/players"
 include_dirs = [
-    # "simple",
-    # "chat_gpt",
+    "simple",
+    "chat_gpt_old",
     "andrey",
     "tony",
     "old_guard",
+    "chat_gpt_o3_mini",
 ]
 
 player_classes = find_import_player_classes(players_folder, include_dirs)
